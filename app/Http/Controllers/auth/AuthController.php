@@ -10,24 +10,33 @@ class AuthController extends Controller
 {
     //
 
-    public function login(){
+    public function login()
+    {
 
-        if(Auth::check()){
-            if(Auth::user()->role == 'admin'){
-                return redirect('/admin')->with('message','berhasil login sebagai admin');
-            }elseif(Auth::user()->role == 'user' ){
-
+        if (Auth::check()) {
+            if (Auth::user()->role == 'admin') {
+                return redirect('/admin')->with('message', 'berhasil login sebagai admin');
+            } elseif (Auth::user()->role == 'user') {
             }
-            
-        }else{
-            return view('auth.login')->with('message','gagal login');
+        } else {
+            return view('auth.login')->with('message', 'gagal login');
         }
     }
 
-    public function actionLogin(Request $request){
-            $request->validate([
-                'email' => 'required|email',
-                'password'=>'required'
-            ]);
+    public function actionLogin(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            if (Auth::user()->role == 'admin') {
+                return redirect('/admin')->with('message', 'berhasil login sebagai admin');
+            } elseif (Auth::user()->role == 'user') {
+            }
+        } else {
+            return back()->with('message', 'gagal login');
+        }
     }
 }
