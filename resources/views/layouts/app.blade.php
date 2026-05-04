@@ -34,6 +34,7 @@
             <a href="/employee" class="block py-2 px-4 rounded-lg hover:bg-gray-700"> Employee</a>
             <a href="/payroll" class="block py-2 px-4 rounded-lg hover:bg-gray-700"> Payroll</a>
             <a href="#" class="block py-2 px-4 rounded-lg hover:bg-gray-700"> Attendance</a>
+            <a href="{{ route('logout') }}" class="block py-2 px-4 rounded-lg hover:bg-red-900 text-red-500"> Log Out</a>
         </nav>
     </aside>
 
@@ -49,7 +50,7 @@
             <h1 class="text-xl font-semibold">Dashboard</h1>
 
             <div class="flex items-center space-x-4">
-                <span class="text-gray-600">Hi, Admin</span>
+                <span class="text-gray-600">Hi, {{ Auth::user()->name }}</span>
                 <img src="https://i.pravatar.cc/40" class="w-10 h-10 rounded-full">
             </div>
         </header>
