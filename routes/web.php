@@ -7,6 +7,8 @@ Route::get('/',[AuthController::class, 'login'])->name('login');
 Route::post('/action/login',[AuthController::class, 'actionLogin'])->name('action.login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 // Routing admin
+Route::middleware(['role:admin'])->group(function (){
+
 Route::get('/admin', function () {
     return view('admin.index');
 });
@@ -22,4 +24,13 @@ Route::get('/user',function(){
 Route::get('/payroll',function(){
     return view('admin.payroll');
 });
+
+});
+
 // END ROUTING ADMIN
+Route::middleware(['role:user'])->group(function (){
+
+    Route::get('/attendance', function () {
+        return view('user.kehadiran');
+    });
+});
