@@ -1,7 +1,9 @@
 <div class="p-6 bg-gray-50 min-h-screen">
+    @livewireStyles()
+    @livewireScripts()
     <script src="https://cdn.tailwindcss.com"></script>
     <div class="mb-6">
-        <select name="" wire:model.live='status'
+        <select name="" wire:model='status'
             class="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium shadow-sm">
             <option value="">---Pilih Status---</option>
             <option value="present">Hadir</option>
@@ -9,7 +11,7 @@
             <option value="sick">Sakit</option>
             <option value="absent">Tidak Hadir</option>
         </select>
-        <button wire:click='save()'>Save</button>
+        <button type="button" wire:click='save'>Save</button>
         @if (session('massage'))
             <p>{{ session('massage') }}</p>
         @endif

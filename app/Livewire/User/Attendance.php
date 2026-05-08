@@ -26,6 +26,6 @@ class Attendance extends Component
             'date' => now()->toDateString(),
             'status' => $this->status
         ]);
-        session()->flash('message', 'Absensi berhasil disimpan.');
+        session()->flash('massage', 'Absensi berhasil disimpan.');
     }
 }
