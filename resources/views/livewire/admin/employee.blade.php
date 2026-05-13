@@ -1,116 +1,170 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-    <h1 class="text-3xl font-bold mb-2 text-gray-800">Halaman Pegawai</h1>
-    <p class="text-gray-600 mb-6">Kelola data pegawai dan informasi gaji</p>
+<div class="min-h-screen bg-slate-950 p-8 font-sans">
+    {{-- page employee --}}
 
+    {{-- Header --}}
+    <div class="mb-8">
+        <p class="text-emerald-400 text-sm font-semibold tracking-widest uppercase mb-1">Manajemen</p>
+        <h1 class="text-4xl font-black text-white tracking-tight">Pegawai</h1>
+        <p class="text-slate-400 mt-1 text-sm">Kelola data pegawai dan informasi gaji pokok</p>
+    </div>
+
+    {{-- Alerts --}}
     @if ($errors->any())
-        <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded">
+        <div class="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
             @foreach ($errors->all() as $error)
-                <p class="text-red-700 text-sm font-medium">{{ $error }}</p>
+                <p class="text-red-400 text-sm font-medium flex items-center gap-2">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                    {{ $error }}
+                </p>
             @endforeach
         </div>
     @endif
 
     @if (session('message'))
-        <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded">
-            <p class="text-green-700 text-sm font-semibold">{{ session('message') }}</p>
+        <div class="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
+            <p class="text-emerald-400 text-sm font-semibold flex items-center gap-2">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                {{ session('message') }}
+            </p>
         </div>
     @endif
 
-    <form class="max-w-lg space-y-4 bg-white p-6 rounded-lg shadow-md mb-8" wire:submit.prevent='store'>
-        <!-- User -->
-        <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">User</label>
-            <select wire:model='user_id'
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white">
-                <option value="">--- Pilih User ---</option>
-                @foreach ($users as $user)
-                    <option value="{{ $user->id }}">
-                        {{ $user->name }}
-                    </option>
-                @endforeach
-            </select>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        {{-- Form --}}
+        <div class="lg:col-span-1">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                <h2 class="text-white font-bold text-base mb-5 flex items-center gap-2">
+                    <div class="w-1 h-5 bg-emerald-500 rounded-full"></div>
+                    {{ $editCheck ? 'Edit Pegawai' : 'Tambah Pegawai' }}
+                </h2>
+
+                <form wire:submit.prevent='store' class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">User</label>
+                        <select wire:model='user_id'
+                            class="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm transition">
+                            <option value="">--- Pilih User ---</option>
+                            @foreach ($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Posisi</label>
+                        <select wire:model='position_id'
+                            class="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm transition">
+                            <option value="">--- Pilih Posisi ---</option>
+                            @foreach ($positions as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Gaji Pokok</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-bold">Rp</span>
+                            <input wire:model='salary' type="number"
+                                class="w-full pl-9 pr-4 py-2.5 bg-slate-800 border border-slate-700 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent placeholder-slate-500 text-sm transition"
+                                placeholder="0">
+                        </div>
+                    </div>
+
+                    @if ($editCheck == false)
+                        <button type="submit"
+                            class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-2.5 rounded-xl transition duration-200 text-sm">
+                            Simpan Pegawai
+                        </button>
+                    @endif
+                </form>
+
+                @if ($editCheck == true)
+                    <div class="flex gap-2 mt-4">
+                        <button wire:click='update({{ $idEdit }})'
+                            class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-xl transition duration-200 text-sm">
+                            Update
+                        </button>
+                        <button wire:click='clear()'
+                            class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold px-4 py-2.5 rounded-xl transition duration-200 text-sm">
+                            Batal
+                        </button>
+                    </div>
+                @endif
+            </div>
         </div>
 
-        <!-- Position -->
-        <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Position</label>
-            <select wire:model='position_id'
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white">
-                <option value="">--- Pilih Position ---</option>
-                @foreach ($positions as $item)
-                    <option value="{{ $item->id }}">
-                        {{ $item->name }}
-                    </option>
-                @endforeach
-            </select>
+        {{-- Table --}}
+        <div class="lg:col-span-2">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                        <span class="text-slate-300 text-sm font-semibold">Daftar Pegawai</span>
+                    </div>
+                    <span class="text-xs text-slate-500 bg-slate-800 px-3 py-1 rounded-full">
+                        {{ count($employees ?? []) }} pegawai
+                    </span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-800">
+                                <th class="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider w-12">#</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Nama</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Posisi</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Gaji</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/70">
+                            @foreach ($employees as $item)
+                                <tr class="hover:bg-slate-800/40 transition duration-150">
+                                    <td class="px-6 py-4 text-slate-500 font-mono text-xs">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xs font-bold uppercase flex-shrink-0">
+                                                {{ substr($item->user->name, 0, 1) }}
+                                            </div>
+                                            <span class="text-white font-medium">{{ $item->user->name }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">
+                                            {{ $item->position->name }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="text-emerald-400 font-bold">Rp {{ number_format($item->salary) }}</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2">
+                                            <button wire:click='destroy({{ $item->id }})'
+                                                class="px-3 py-1.5 bg-red-500/15 hover:bg-red-500/25 text-red-400 text-xs font-semibold rounded-lg transition border border-red-500/20">
+                                                Hapus
+                                            </button>
+                                            @if ($editCheck == false)
+                                                <button wire:click='edit({{ $item->id }})'
+                                                    class="px-3 py-1.5 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 text-xs font-semibold rounded-lg transition border border-emerald-500/20">
+                                                    Edit
+                                                </button>
+                                            @else
+                                                <button wire:click='clear()'
+                                                    class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-semibold rounded-lg transition">
+                                                    Clear
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <!-- Gaji -->
-        <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Gaji</label>
-            <input wire:model='salary' type="number" placeholder="Masukkan gaji"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white">
-        </div>
-
-        <!-- Button -->
-        <div class="pt-2">
-            @if ($editCheck == false)
-                <button type="submit"
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg transition duration-200 shadow-sm">
-                    Simpan
-                </button>
-            @endif
-        </div>
-    </form>
-
-    @if ($editCheck == true)
-        <button wire:click='update({{ $idEdit }})'
-            class="bg-purple-500 hover:bg-purple-600 text-white font-semibold px-6 py-2 rounded-lg transition duration-200 shadow-sm mb-6">
-            Update
-        </button>
-    @endif
-
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full divide-y divide-gray-200">
-                <thead class=" bg-blue-700 text-white">
-                    <tr>
-                        <th class="px-6 py-4 text-left text-sm font-semibold">#</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold">Username</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold">Position name</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold">Salary</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold">Action</th>
-                    </tr>
-                </thead>
-
-                <tbody class="divide-y divide-gray-200">
-                    @foreach ($employees as $item)
-                        <tr class="hover:bg-gray-50 transition duration-150">
-                            <td class="px-6 py-4 text-sm text-gray-900 font-medium">{{ $loop->iteration }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $item->user->name }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $item->position->name }}</td>
-                            <td class="px-6 py-4 text-sm text-green-600 font-semibold">Rp.
-                                {{ number_format($item->salary) }}</td>
-                            <td class="px-6 py-4 text-sm space-x-2">
-                                <button
-                                    class="bg-red-500 hover:bg-red-600 px-4 py-2 text-white text-xs font-semibold rounded transition"
-                                    wire:click='destroy({{ $item->id }})'>Hapus</button>
-                                @if ($editCheck == false)
-                                    <button wire:click='edit({{ $item->id }})'
-                                        class="bg-blue-500 hover:bg-blue-600 px-4 py-2 text-white text-xs font-semibold rounded transition">Edit</button>
-                                @endif
-                                @if ($editCheck == true)
-                                    <button
-                                        class="bg-blue-500 hover:bg-blue-600 px-4 py-2 text-white text-xs font-semibold rounded transition"
-                                        wire:click='clear()'>
-                                        Clear
-                                    </button>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
     </div>
 </div>

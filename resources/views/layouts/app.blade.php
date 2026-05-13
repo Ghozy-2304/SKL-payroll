@@ -56,7 +56,7 @@
         </header>
 
         <!-- Content -->
-        <main class="p-6 overflow-y-auto">
+        <main class=" overflow-y-auto">
 
             
 
