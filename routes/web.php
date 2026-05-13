@@ -15,6 +15,9 @@ Route::get('/admin', function () {
 Route::get('/position', function () {
     return view('admin.position');
 }); 
+Route::get('/attendance', function () {
+    return view('admin.attendance');
+}); 
 Route::get('/employee', function () {
     return view('admin.pegawai');
 }); 
@@ -30,7 +33,7 @@ Route::get('/payroll',function(){
 // END ROUTING ADMIN
 Route::middleware(['role:user'])->group(function (){
 
-    Route::get('/attendance', function () {
+    Route::get('/home', function () {
         return view('user.kehadiran');
     });
 });

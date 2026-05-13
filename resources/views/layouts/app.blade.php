@@ -28,13 +28,13 @@
         </div>
 
         <nav class="mt-6 space-y-2 px-4">
-            <a href="#" class="block py-2 px-4 rounded-lg hover:bg-gray-700">🏠 Dashboard</a>
-            <a href="/user" class="block py-2 px-4 rounded-lg hover:bg-gray-700">👤 Users</a>
+            <a href="/" class="block py-2 px-4 rounded-lg hover:bg-gray-700"> Dashboard</a>
+            <a href="/user" class="block py-2 px-4 rounded-lg hover:bg-gray-700"> Users</a>
             <a href="/position" class="block py-2 px-4 rounded-lg hover:bg-gray-700"> Position</a>
             <a href="/employee" class="block py-2 px-4 rounded-lg hover:bg-gray-700"> Employee</a>
             <a href="/payroll" class="block py-2 px-4 rounded-lg hover:bg-gray-700"> Payroll</a>
-            <a href="#" class="block py-2 px-4 rounded-lg hover:bg-gray-700"> Attendance</a>
-            <a href="{{ route('logout') }}" class="block py-2 px-4 rounded-lg hover:bg-red-900 text-red-500"> Log Out</a>
+            <a href="/attendance" class="block py-2 px-4 rounded-lg hover:bg-gray-700"> Attendance</a>
+            <a href="{{ route('logout') }}" class="block py-2 px-4 rounded-lg bg-red-900 text-red-500"> Log Out</a>
         </nav>
     </aside>
 

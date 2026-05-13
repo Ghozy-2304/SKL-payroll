@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\User;
+namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +14,7 @@ class Attendance extends Component
     public function render()
     {
         $attendance = ModelsAttendance::all();
-        return view('livewire.user.attendance', compact('attendance'));
+        return view('livewire.admin.attendance', compact('attendance'));
     }
 
     public function save(){

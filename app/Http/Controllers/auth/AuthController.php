@@ -18,7 +18,7 @@ class AuthController extends Controller
                 return redirect('/admin')->with('message', 'berhasil login sebagai admin');
 
             } elseif (Auth::user()->role == 'user') {
-                return redirect('/attendance')->with('message', 'berhasil login sebagai user');
+                return redirect('/home')->with('message', 'berhasil login sebagai user');
                 
             }
         } else {
@@ -37,7 +37,7 @@ class AuthController extends Controller
             if (Auth::user()->role == 'admin') {
                 return redirect('/admin')->with('message', 'berhasil login sebagai admin');
             } elseif (Auth::user()->role == 'user') {
-                return redirect('/attendance')->with('message', 'berhasil login sebagai user');
+                return redirect('/home')->with('message', 'berhasil login sebagai user');
             }
         } else {
             return back()->with('message', 'gagal login');
